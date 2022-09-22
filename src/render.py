@@ -1,7 +1,6 @@
 """
 Universidad del Valle de Guatemala
 (CC2018) Gráficas por Computadora
-Librería de archivos .bmp
 Santiago Taracena Puga (20017)
 """
 
