@@ -21,7 +21,6 @@ class Render(object):
   __viewport_y_coordinate = 0
 
   # Constantes del render.
-  __MAX_DIMENSION = 2147483647
   __FILE_HEADER_SIZE = 14
   __IMAGE_HEADER_SIZE = 40
   __HEADER_SIZE = (__FILE_HEADER_SIZE + __IMAGE_HEADER_SIZE)
