@@ -5,7 +5,11 @@ Santiago Taracena Puga (20017)
 """
 
 # Módulos necesarios.
+from vector import Vector
+from sphere import Sphere
+import math
 import utils
+import random
 
 # Definición de la clase Raytracer.
 class Raytracer(object):
@@ -20,22 +24,53 @@ class Raytracer(object):
   def __init__(self, width, height):
     self.width = width
     self.height = height
-    self.clear_color = utils.BLACK
+    self.background_color = utils.BLACK
     self.current_color = utils.WHITE
     self.framebuffer = []
+    self.ray_probability = 1
+    self.objects = []
     self.clear()
 
   # Método para limpiar la pantalla del raytracer.
   def clear(self):
-    self.framebuffer = [[self.clear_color for x in range(self.width)] for y in range(self.height)]
+    self.framebuffer = [[self.background_color for x in range(self.width)] for y in range(self.height)]
 
   # Método para dibujar un punto en la pantalla del raytracer.
   def point(self, x, y, color=None):
-    if ((0 < y < self.height) and (0 < x < self.width)):
+    if ((0 <= y <= self.height) and (0 <= x <= self.width)):
       self.framebuffer[y][x] = color or self.current_color
 
+  def cast_ray(self, origin, direction):
+    for object in self.objects:
+      if (object.ray_interception(origin, direction)): # object.ray_interception(origin, direction)
+        return self.current_color
+    return self.background_color
+
+  def set_ray_probability(self, ray_probability):
+    self.ray_probability = ray_probability
+
+  def render(self):
+    
+    field_of_view = int(math.pi / 2)
+    aspect_ratio = (self.width / self.height)
+    tangent = math.tan(field_of_view / 2)
+    
+    for y in range(self.height):
+      for x in range(self.width):
+        
+        random_value = random.random()
+
+        if (random_value <= self.ray_probability):
+          
+          i = (((2 * (x + 0.5) / self.width) - 1) * (tangent * aspect_ratio))
+          j = ((1 - (2 * (y + 0.5) / self.height)) * tangent)
+          origin = Vector(0, 0, 0)
+          direction = Vector(i, j, -1).norm()
+          color = self.cast_ray(origin, direction)
+          self.point(y, x, color)
+
   # Método para renderizar el raytracer.
-  def render(self, filename="./images/image.bmp"):
+  def write(self, filename="./images/image.bmp"):
 
     bmp_filename = filename if filename.endswith(".bmp") else f"{filename}.bmp"
     actual_filename = bmp_filename if bmp_filename.startswith("./images/") else f"./images/{bmp_filename}"
