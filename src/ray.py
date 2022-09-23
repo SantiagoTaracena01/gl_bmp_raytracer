@@ -48,28 +48,34 @@ class Raytracer(object):
     if ((0 <= y <= self.height) and (0 <= x <= self.width)):
       self.framebuffer[y][x] = color or self.current_color
 
+  # Método que verifica si un rayo pasa por un objeto del mundo.
   def cast_ray(self, origin, direction):
     for object, color in zip(self.objects, self.colors):
       if (object.ray_interception(origin, direction)):
         return color
     return self.background_color
 
+  # Método setter para la probabilidad del disparo de un rayo.
   def set_ray_probability(self, ray_probability):
     self.ray_probability = ray_probability
 
+  # Método para renderizar una escena.
   def render(self):
-    
-    field_of_view = int(math.pi / 2)
+
+    # Constantes importantes para los cálculos del método.
     aspect_ratio = (self.width / self.height)
+    field_of_view = int(math.pi / 2)
     tangent = math.tan(field_of_view / 2)
-    
+
+    # Iteración sobre el framebuffer.
     for y in range(self.height):
       for x in range(self.width):
-        
+
+        # Valor aleatorio para simular una probabilidad de disparo.
         random_value = random.random()
 
+        # Disparo del rayo y dibujo de un punto en la pantalla si la condición se cumple.
         if (random_value <= self.ray_probability):
-          
           i = ((((2 * (x + 0.5)) / self.width) - 1) * (tangent * aspect_ratio))
           j = ((1 - ((2 * (y + 0.5)) / self.height)) * tangent)
           origin = Vector(0, 0, 0)
@@ -80,17 +86,21 @@ class Raytracer(object):
   # Método para renderizar el raytracer.
   def write(self, filename="./images/image.bmp"):
 
+    # Formateo del nombre del archivo para estar en la carpeta de imágenes.
     bmp_filename = filename if filename.endswith(".bmp") else f"{filename}.bmp"
     actual_filename = bmp_filename if bmp_filename.startswith("./images/") else f"./images/{bmp_filename}"
 
+    # Apertura del archivo.
     file = open(actual_filename, "bw")
 
+    # Escritura preliminar del header del archivo.
     file.write(utils.char("B"))
     file.write(utils.char("M"))
     file.write(utils.dword(self.__HEADER_SIZE + (self.width * self.height * self.__COLORS_PER_PIXEL)))
     file.write(utils.dword(0))
     file.write(utils.dword(self.__HEADER_SIZE))
 
+    # Finalización de la escritura del header del archivo.
     file.write(utils.dword(self.__IMAGE_HEADER_SIZE))
     file.write(utils.dword(self.width))
     file.write(utils.dword(self.height))
@@ -103,8 +113,13 @@ class Raytracer(object):
     file.write(utils.dword(0))
     file.write(utils.dword(0))
 
+    # Escritura de cada pixel del archivo mediante los valores del framebuffer.
     for x in range(self.width):
       for y in range(self.height):
         file.write(self.framebuffer[y][x])
 
+    # Cierre del archivo.
     file.close()
+
+    # Retorno del nombre del archivo para futuras operaciones.
+    return actual_filename

@@ -4,17 +4,21 @@ Universidad del Valle de Guatemala
 Santiago Taracena Puga (20017)
 """
 
+# Librerías necesarias importadas.
 from ray import Raytracer
 from vector import Vector
 from sphere import Sphere
 import utils
 import time
 
+# Ejecución del código principal del proyecto.
 if __name__ == "__main__":
 
+  # Instancia del raytracer y color de fondo.
   raytracer = Raytracer(600, 600)
   raytracer.background_color = utils.color(0, 0, 50)
 
+  # Mapeo del muñeco de nieve a dibujar.
   snowman = [
     {
       "color": utils.BLACK,
@@ -47,14 +51,17 @@ if __name__ == "__main__":
     },
   ]
 
+  # Esferas y colores necesarios para el muñeco de nieve.
   for part in snowman:
     for sphere in part["spheres"]:
       raytracer.objects.append(sphere)  
       raytracer.colors.append(part["color"])
 
+  # Renderización y toma de tiempo del programa.
   start = time.time()
   raytracer.render()
-  raytracer.write("./images/snowman.bmp")
+  image_path = raytracer.write("./images/snowman.bmp")
 
-  print("\nRendering process has been finished! Check ./images/<your result>.bmp!")
+  # Impresión de resultados.
+  print(f"\nRendering process has been finished! Check {image_path}!")
   print(f"Finished in {round((time.time() - start), 4)} seconds.\n")
