@@ -6,7 +6,6 @@ Santiago Taracena Puga (20017)
 
 # Módulos necesarios.
 from vector import Vector
-from sphere import Sphere
 import math
 import utils
 import random
@@ -29,11 +28,20 @@ class Raytracer(object):
     self.framebuffer = []
     self.ray_probability = 1
     self.objects = []
+    self.colors = []
     self.clear()
 
   # Método para limpiar la pantalla del raytracer.
   def clear(self):
     self.framebuffer = [[self.background_color for x in range(self.width)] for y in range(self.height)]
+
+  # Método para cambiar fácilmente el color de fondo.
+  def set_background_color(self, r, g, b):
+    self.background_color = utils.color(r, g, b)
+  
+  # Método para cambiar fácilmente el color del dibujo.
+  def set_current_color(self, r, g, b):
+    self.current_color = utils.color(r, g, b)
 
   # Método para dibujar un punto en la pantalla del raytracer.
   def point(self, x, y, color=None):
@@ -41,9 +49,9 @@ class Raytracer(object):
       self.framebuffer[y][x] = color or self.current_color
 
   def cast_ray(self, origin, direction):
-    for object in self.objects:
-      if (object.ray_interception(origin, direction)): # object.ray_interception(origin, direction)
-        return self.current_color
+    for object, color in zip(self.objects, self.colors):
+      if (object.ray_interception(origin, direction)):
+        return color
     return self.background_color
 
   def set_ray_probability(self, ray_probability):
@@ -62,8 +70,8 @@ class Raytracer(object):
 
         if (random_value <= self.ray_probability):
           
-          i = (((2 * (x + 0.5) / self.width) - 1) * (tangent * aspect_ratio))
-          j = ((1 - (2 * (y + 0.5) / self.height)) * tangent)
+          i = ((((2 * (x + 0.5)) / self.width) - 1) * (tangent * aspect_ratio))
+          j = ((1 - ((2 * (y + 0.5)) / self.height)) * tangent)
           origin = Vector(0, 0, 0)
           direction = Vector(i, j, -1).norm()
           color = self.cast_ray(origin, direction)

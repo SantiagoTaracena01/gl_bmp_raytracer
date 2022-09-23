@@ -27,3 +27,6 @@ class Vector(object):
 
   def norm(self):
     return (self * (1 / self.length()))
+
+  def __repr__(self):
+    return f"<{self.x}, {self.y}, {self.z}>"

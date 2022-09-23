@@ -7,18 +7,54 @@ Santiago Taracena Puga (20017)
 from ray import Raytracer
 from vector import Vector
 from sphere import Sphere
+import utils
+import time
 
 if __name__ == "__main__":
 
   raytracer = Raytracer(600, 600)
-  raytracer.set_ray_probability(0.1)
+  raytracer.background_color = utils.color(0, 0, 50)
 
-  raytracer.objects = [
-    Sphere(Vector(0, -4, -20), 2),
-    Sphere(Vector(0, 0, -20), 3),
+  snowman = [
+    {
+      "color": utils.BLACK,
+      "spheres": [
+        Sphere(Vector(-0.6, -6, -20), 0.35),
+        Sphere(Vector(0.6, -6, -20), 0.35),
+        Sphere(Vector(-1, -4.25, -20), 0.2),
+        Sphere(Vector(-0.6, -3.85, -20), 0.2),
+        Sphere(Vector(0, -3.75, -20), 0.2),
+        Sphere(Vector(0.6, -3.85, -20), 0.2),
+        Sphere(Vector(1, -4.25, -20), 0.2),
+        Sphere(Vector(0, -2, -20), 0.35),
+        Sphere(Vector(0, -0.5, -20), 0.35),
+        Sphere(Vector(0, 1, -20), 0.35),
+      ],
+    },
+    {
+      "color": utils.ORANGE,
+      "spheres": [
+        Sphere(Vector(0, -5, -20), 0.35),
+      ],
+    },
+    {
+      "color": utils.WHITE,
+      "spheres": [
+        Sphere(Vector(0, -5, -20), 2),
+        Sphere(Vector(0, -1, -20), 3),
+        Sphere(Vector(0, 4, -20), 4),
+      ],
+    },
   ]
 
-  raytracer.render()
-  raytracer.write()
+  for part in snowman:
+    for sphere in part["spheres"]:
+      raytracer.objects.append(sphere)  
+      raytracer.colors.append(part["color"])
 
-  print("\nRendering process has been finished! Check ./images/<your result>.bmp!\n")
+  start = time.time()
+  raytracer.render()
+  raytracer.write("./images/snowman.bmp")
+
+  print("\nRendering process has been finished! Check ./images/<your result>.bmp!")
+  print(f"Finished in {round((time.time() - start), 4)} seconds.\n")

@@ -24,3 +24,6 @@ class Sphere(object):
       return False
     
     return True
+
+  def __repr__(self):
+    return f"({self.center}, {self.radius})"
