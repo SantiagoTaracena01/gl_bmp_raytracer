@@ -5,7 +5,7 @@ Santiago Taracena Puga (20017)
 """
 
 # Librerías necesarias importadas.
-from ray import Raytracer
+from raytracer import Raytracer
 from vector import Vector
 from sphere import Sphere
 import utils
