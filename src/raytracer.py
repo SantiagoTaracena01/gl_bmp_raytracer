@@ -29,7 +29,7 @@ class Raytracer(object):
     self.current_color = utils.WHITE
     self.ray_probability = 1
     self.framebuffer = []
-    self.objects = []
+    self.scene = []
     self.colors = []
     self.light = Light(Vector(0, 0, 0), 1)
     self.clear()
@@ -53,37 +53,51 @@ class Raytracer(object):
 
   # Método que verifica si un rayo pasa por un objeto del mundo.
   def cast_ray(self, origin, direction):
+
+    # Material e intercepto hallados mediante la función para encontrar el intercepto de la escena.
     material, intersect = self.scene_intersect(origin, direction)
-    
-    if material is None:
+
+    # Retorno del color de fondo si el material no se ha encontrado.
+    if (material is None):
       return self.background_color
-    
+
+    # Cálculo de la dirección de la luz y la intensidad del color.
     light_direction = (self.light.position - intersect.hit_point).norm()
     intensity = light_direction @ intersect.normal
-    actual_diffuse = utils.Color(
+
+    # Color a pintar en el pixel del framebuffer.
+    actual_diffuse = Color(
       round(material.diffuse.r) * intensity,
       round(material.diffuse.g) * intensity,
       round(material.diffuse.b) * intensity,
     )
-    return actual_diffuse
-    
-    # # Versión anterior al 27/09/2022
-    # for object, color in zip(self.objects, self.colors):
-    #   if (object.ray_interception(origin, direction)):
-    #     return color
-    # return self.background_color
 
+    # Retorno del color a pintar.
+    return actual_diffuse
+
+  # Método que halla la intersección del rayo con un objeto.
   def scene_intersect(self, origin, direction):
-    z_buffer = 999999
+
+    # Variables importantes para 
+    z_buffer = 999_999
     material = None
     intersect = None
-    for object in self.objects:
+
+    # Iteración sobre todos los objetos de la escena.
+    for object in self.scene:
+
+      # Cálculo de la intersección del rayo con el objeto.
       object_intersect = object.ray_interception(origin, direction)
-      if object_intersect:
-        if object_intersect.distance < z_buffer:
-          z_buffer = object_intersect.distance
-          material = object.material
-          intersect = object_intersect
+
+      # Condicional que se ejecuta si el rayo interceptó un objeto y su distancia es menor al z buffer.
+      if (object_intersect and (object_intersect.distance < z_buffer)):
+
+        # Reinstancia de las variables para calcular los colores.
+        z_buffer = object_intersect.distance
+        material = object.material
+        intersect = object_intersect
+
+    # Retorno del material y den itercepto dónde pintarlo.
     return material, intersect
 
   # Método setter para la probabilidad del disparo de un rayo.

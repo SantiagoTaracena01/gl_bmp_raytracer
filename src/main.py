@@ -24,13 +24,13 @@ if __name__ == "__main__":
 
   # Instancia del raytracer y color de fondo.
   raytracer = Raytracer(600, 600)
-  raytracer.set_ray_probability(1)
   raytracer.background_color = Color(0, 0, 50)
   raytracer.light = Light(Vector(-8, -8, 0), 1)
 
-  raytracer.objects = [
+  # Objetos para renderizar con el raytracer.
+  raytracer.scene = [
     Sphere(Vector(-4, 0, -16), 2, red),
-    Sphere(Vector(2, 0, -10), 2, white)
+    Sphere(Vector(2, 0, -10), 2, white),
   ]
 
   # Renderización y toma de tiempo del programa.

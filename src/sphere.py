@@ -35,24 +35,15 @@ class Sphere(object):
     t0 = (tca - thc)
     t1 = (tca + thc)
 
-    # if (t0 < 0):
-    #   t0 = t1
-    # if (t0 < 0):
-    #   return None
-
     # Cambio de la variable t0 si es menor a cero.
     t0 = t1 if (t0 < 0) else t0
 
+    # Punto de intercepto y vector normal de la superficie.
     hit_point = ((direction * t0) + origin)
     normal = (hit_point - self.center).norm()
 
-    # return None
-    # return Intersect(distance=t0)
-
+    # Retorno de la función.
     return Intersect(t0, hit_point, normal) if (t0 > 0) else None
-
-    # Retorno del resultado definitivo de la intercepción.
-    # return (t0 > 0)
 
   # Representación textual de la esfera.
   def __repr__(self):
