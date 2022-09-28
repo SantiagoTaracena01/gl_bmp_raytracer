@@ -14,9 +14,9 @@ class Color(object):
 
   # Método constructor de la clase Color.
   def __init__(self, r, g, b):
-    self.r = r
-    self.g = g
-    self.b = b
+    self.r = min(255, max(r, 0))
+    self.g = min(255, max(g, 0))
+    self.b = min(255, max(b, 0))
 
   # Definición de multiplicación entre colores.
   def __mul__(self, other):
