@@ -4,11 +4,6 @@ Universidad del Valle de Guatemala
 Santiago Taracena Puga (20017)
 """
 
-# Es la actitud y aptitud que toma un individuo para iniciar un nuevo proyecto a través de ideas y oportunidades: Emprendimiento
-# Todas menos organigrama
-# Entre las dificultades... Verdadero
-# Es uno de los aspectos básicos del IDH: Tasa de alfabetización
-
 # Definición de la clase Color.
 class Color(object):
 
