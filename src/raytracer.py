@@ -6,6 +6,7 @@ Santiago Taracena Puga (20017)
 
 # Módulos necesarios.
 from vector import Vector
+from light import Light
 import math
 import utils
 import random
@@ -29,6 +30,7 @@ class Raytracer(object):
     self.ray_probability = 1
     self.objects = []
     self.colors = []
+    self.light = Light(Vector(0, 0, 0), 1)
     self.clear()
 
   # Método para limpiar la pantalla del raytracer.
@@ -37,11 +39,11 @@ class Raytracer(object):
 
   # Método para cambiar fácilmente el color de fondo.
   def set_background_color(self, r, g, b):
-    self.background_color = utils.color(r, g, b)
+    self.background_color = utils.Color(r, g, b)
   
   # Método para cambiar fácilmente el color del dibujo.
   def set_current_color(self, r, g, b):
-    self.current_color = utils.color(r, g, b)
+    self.current_color = utils.Color(r, g, b)
 
   # Método para dibujar un punto en la pantalla del raytracer.
   def point(self, x, y, color=None):
@@ -50,10 +52,36 @@ class Raytracer(object):
 
   # Método que verifica si un rayo pasa por un objeto del mundo.
   def cast_ray(self, origin, direction):
-    for object, color in zip(self.objects, self.colors):
-      if (object.ray_interception(origin, direction)):
-        return color
-    return self.background_color
+    material, intersect = self.scene_intersect(origin, direction)
+    
+    if material is None:
+      return self.background_color
+    
+    light_direction = (self.light.position - intersect.point).norm()
+    intensity = light_direction @ intersect.normal
+    actual_diffuse = utils.Color(
+      round(material.diffuse[2]) * intensity,
+      round(material.diffuse[1]) * intensity,
+      round(material.diffuse[0]) * intensity,
+    )
+    return actual_diffuse
+    # for object, color in zip(self.objects, self.colors):
+    #   if (object.ray_interception(origin, direction)):
+    #     return color
+    # return self.background_color
+
+  def scene_intersect(self, origin, direction):
+    z_buffer = 999999
+    material = None
+    intersect = None
+    for object in self.objects:
+      object_intersect = object.ray_interception(origin, direction)
+      if object_intersect:
+        if object_intersect.distance < z_buffer:
+          z_buffer = intersect.distance
+          material = object.material
+          intersect = object_intersect
+    return material, intersect
 
   # Método setter para la probabilidad del disparo de un rayo.
   def set_ray_probability(self, ray_probability):
@@ -116,7 +144,7 @@ class Raytracer(object):
     # Escritura de cada pixel del archivo mediante los valores del framebuffer.
     for x in range(self.width):
       for y in range(self.height):
-        file.write(self.framebuffer[y][x])
+        file.write(self.framebuffer[y][x].to_bytes())
 
     # Cierre del archivo.
     file.close()
