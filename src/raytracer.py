@@ -53,38 +53,38 @@ class Raytracer(object):
 
   # Método que verifica si un rayo pasa por un objeto del mundo.
   def cast_ray(self, origin, direction):
-    # material, intersect = self.scene_intersect(origin, direction)
+    material, intersect = self.scene_intersect(origin, direction)
     
-    # if material is None:
-    #   return self.background_color
+    if material is None:
+      return self.background_color
     
-    # light_direction = (self.light.position - intersect.hit_point).norm()
-    # intensity = light_direction @ intersect.normal
-    # actual_diffuse = utils.Color(
-    #   round(material.diffuse.r) * intensity,
-    #   round(material.diffuse.g) * intensity,
-    #   round(material.diffuse.b) * intensity,
-    # )
-    # return actual_diffuse
+    light_direction = (self.light.position - intersect.hit_point).norm()
+    intensity = light_direction @ intersect.normal
+    actual_diffuse = utils.Color(
+      round(material.diffuse.r) * intensity,
+      round(material.diffuse.g) * intensity,
+      round(material.diffuse.b) * intensity,
+    )
+    return actual_diffuse
     
-    # Versión anterior al 27/09/2022
-    for object, color in zip(self.objects, self.colors):
-      if (object.ray_interception(origin, direction)):
-        return color
-    return self.background_color
+    # # Versión anterior al 27/09/2022
+    # for object, color in zip(self.objects, self.colors):
+    #   if (object.ray_interception(origin, direction)):
+    #     return color
+    # return self.background_color
 
-  # def scene_intersect(self, origin, direction):
-  #   z_buffer = 999999
-  #   material = None
-  #   intersect = None
-  #   for object in self.objects:
-  #     object_intersect = object.ray_interception(origin, direction)
-  #     if object_intersect:
-  #       if object_intersect.distance < z_buffer:
-  #         z_buffer = object_intersect.distance
-  #         material = object.material
-  #         intersect = object_intersect
-  #   return material, intersect
+  def scene_intersect(self, origin, direction):
+    z_buffer = 999999
+    material = None
+    intersect = None
+    for object in self.objects:
+      object_intersect = object.ray_interception(origin, direction)
+      if object_intersect:
+        if object_intersect.distance < z_buffer:
+          z_buffer = object_intersect.distance
+          material = object.material
+          intersect = object_intersect
+    return material, intersect
 
   # Método setter para la probabilidad del disparo de un rayo.
   def set_ray_probability(self, ray_probability):

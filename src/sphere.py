@@ -11,10 +11,10 @@ from intersect import Intersect
 class Sphere(object):
 
   # Método constructor de la clase Sphere. AGREGAR material
-  def __init__(self, center, radius):
+  def __init__(self, center, radius, material):
     self.center = center
     self.radius = radius
-    # self.material = material
+    self.material = material
 
   # Método que calcula si un rayo atraviesa la esfera.
   def ray_interception(self, origin, direction):
@@ -28,8 +28,7 @@ class Sphere(object):
 
     # Si d2 es mayor que el radio al cuadrado, el rayo definitivamente no pasa por la esfera.
     if (d2 > squared_radius):
-      # return None
-      return False
+      return None
 
     # Datos extra necesarios para la corroboración.
     thc = ((squared_radius - d2) ** 0.5)
@@ -41,19 +40,19 @@ class Sphere(object):
     # if (t0 < 0):
     #   return None
 
-    # hit_point = ((direction * t0) + origin)
-    # normal = (hit_point - self.center).norm()
-
     # Cambio de la variable t0 si es menor a cero.
     t0 = t1 if (t0 < 0) else t0
+
+    hit_point = ((direction * t0) + origin)
+    normal = (hit_point - self.center).norm()
 
     # return None
     # return Intersect(distance=t0)
 
-    # return Intersect(t0, hit_point, normal)
+    return Intersect(t0, hit_point, normal) if (t0 > 0) else None
 
     # Retorno del resultado definitivo de la intercepción.
-    return (t0 > 0)
+    # return (t0 > 0)
 
   # Representación textual de la esfera.
   def __repr__(self):
