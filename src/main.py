@@ -39,5 +39,4 @@ if __name__ == "__main__":
   image_path = raytracer.write()
 
   # Impresión de resultados.
-  print(f"\nRendering process has been finished! Check {image_path}!")
-  print(f"Finished in {round((time.time() - start), 4)} seconds.\n")
+  print(f"\nRendering process has been finished in {round((time.time() - start), 4)} seconds! Check {image_path}!\n")
