@@ -20,7 +20,7 @@ class Color(object):
     r, g, b = self.r, self.g, self.b
 
     # Los colores multiplicados por números aumentan o disminuyen en función del número.
-    if (type(other) == int or type(other) == float):
+    if ((type(other) == int) or (type(other) == float)):
       r *= other
       g *= other
       b *= other
