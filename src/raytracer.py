@@ -31,7 +31,7 @@ class Raytracer(object):
     self.framebuffer = []
     self.scene = []
     self.colors = []
-    self.light = Light(Vector(0, 0, 0), 1)
+    self.light = Light(Vector(0, 0, 0), 1, Color(255, 255, 255))
     self.clear()
 
   # Método para limpiar la pantalla del raytracer.
@@ -63,17 +63,20 @@ class Raytracer(object):
 
     # Cálculo de la dirección de la luz y la intensidad del color.
     light_direction = (self.light.position - intersect.hit_point).norm()
-    intensity = light_direction @ intersect.normal
+    diffuse_intensity = light_direction @ intersect.normal
 
-    # Color a pintar en el pixel del framebuffer.
-    actual_diffuse = Color(
-      round(material.diffuse.r) * intensity,
-      round(material.diffuse.g) * intensity,
-      round(material.diffuse.b) * intensity,
-    )
+    # Componente del difuso a pintar en el pixel del framebuffer.
+    actual_diffuse = (material.diffuse * diffuse_intensity * material.albedo[0])
+
+    light_reflection = utils.reflect(light_direction, intersect.normal)
+    reflection_intensity = max(0, (light_reflection @ direction))
+    specular_intensity = (self.light.intensity * (reflection_intensity ** material.spec))
+
+    # Cálculo del componente especular.
+    specular_component = (self.light.color * specular_intensity * material.albedo[1])
 
     # Retorno del color a pintar.
-    return actual_diffuse
+    return (actual_diffuse + specular_component)
 
   # Método que halla la intersección del rayo con un objeto.
   def scene_intersect(self, origin, direction):

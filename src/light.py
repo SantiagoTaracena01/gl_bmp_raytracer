@@ -11,6 +11,7 @@ from vector import Vector
 class Light(object):
 
   # Método constructor de la clase Light.
-  def __init__(self, position=Vector(0, 0, 0), intensity=1):
+  def __init__(self, position, intensity, color):
     self.position = position
     self.intensity = intensity
+    self.color = color
