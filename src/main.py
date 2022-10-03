@@ -22,7 +22,7 @@ if __name__ == "__main__":
   second_bear_hair = Material(Color(210, 130, 70), albedo=[0.9, 0.1], spec=10)
   second_bear_parts = Material(Color(150, 40, 20), albedo=[0.9, 0.1], spec=5)
   second_bear_skin = Material(Color(220, 20, 10), albedo=[0.6, 0.4], spec=50)
-  black_material = Material(Color(0, 0, 0), albedo=[0.5, 0.5], spec=250)
+  black_material = Material(Color(0, 0, 0), albedo=[0.9, 0.1], spec=1)
 
   # Instancia del raytracer y color de fondo.
   raytracer = Raytracer(600, 600)
