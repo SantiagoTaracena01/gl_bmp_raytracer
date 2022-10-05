@@ -12,6 +12,8 @@ import math
 import utils
 import random
 
+MAX_RECURSION_DEPTH = 3
+
 # Definición de la clase Raytracer.
 class Raytracer(object):
 
@@ -52,7 +54,11 @@ class Raytracer(object):
       self.framebuffer[y][x] = color or self.current_color
 
   # Método que verifica si un rayo pasa por un objeto del mundo.
-  def cast_ray(self, origin, direction):
+  def cast_ray(self, origin, direction, recursion_counter=0):
+
+    # Contador de la recursividad del método.
+    if (recursion_counter >= MAX_RECURSION_DEPTH):
+      return self.background_color
 
     # Material e intercepto hallados mediante la función para encontrar el intercepto de la escena.
     material, intersect = self.scene_intersect(origin, direction)
@@ -63,7 +69,6 @@ class Raytracer(object):
 
     # Cálculo de la dirección de la luz y la intensidad del color.
     light_direction = (self.light.position - intersect.hit_point).norm()
-    diffuse_intensity = light_direction @ intersect.normal
 
     # Cálculo del material e intercepto de la sombra.
     shadow_bias = 1.1
@@ -72,8 +77,10 @@ class Raytracer(object):
     shadow_intensity = 0.75 if (shadow_material is not None) else 0
 
     # Componente del difuso a pintar en el pixel del framebuffer.
+    diffuse_intensity = (light_direction @ intersect.normal)
     actual_diffuse = (material.diffuse * diffuse_intensity * material.albedo[0] * (1 - shadow_intensity))
 
+    # Cálculo de componentes especulares de la figura.
     light_reflection = utils.reflect(light_direction, intersect.normal)
     reflection_intensity = max(0, (light_reflection @ direction))
     specular_intensity = (self.light.intensity * (reflection_intensity ** material.spec))
@@ -81,13 +88,25 @@ class Raytracer(object):
     # Cálculo del componente especular.
     specular_component = (self.light.color * specular_intensity * material.albedo[1])
 
+    # Cálculo de la reflexión del material.
+    if (material.albedo[2] > 0):
+      reverse_direction = (direction * -1)
+      reflection_direction = utils.reflect(reverse_direction, intersect.normal)
+      reflection_bias = -0.5 if ((reflection_direction @ intersect.normal) < 0) else 0.5
+      reflection_origin = (intersect.hit_point + (intersect.normal * reflection_bias))
+      reflection_color = self.cast_ray(reflection_origin, reflection_direction, (recursion_counter + 1))
+    else:
+      reflection_color = Color(0, 0, 0)
+
+    reflection = (reflection_color * material.albedo[2])
+
     # Retorno del color a pintar.
-    return (actual_diffuse + specular_component)
+    return (actual_diffuse + specular_component + reflection)
 
   # Método que halla la intersección del rayo con un objeto.
   def scene_intersect(self, origin, direction):
 
-    # Variables importantes para 
+    # Variables importantes para el cálculo del intercepto del raytracer.
     z_buffer = 999_999
     material = None
     intersect = None
