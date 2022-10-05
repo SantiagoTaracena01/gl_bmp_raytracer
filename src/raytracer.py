@@ -65,8 +65,14 @@ class Raytracer(object):
     light_direction = (self.light.position - intersect.hit_point).norm()
     diffuse_intensity = light_direction @ intersect.normal
 
+    # Cálculo del material e intercepto de la sombra.
+    shadow_bias = 1.1
+    shadow_origin = (intersect.hit_point + (intersect.normal * shadow_bias))
+    shadow_material, _ = self.scene_intersect(shadow_origin, light_direction)
+    shadow_intensity = 0.75 if (shadow_material is not None) else 0
+
     # Componente del difuso a pintar en el pixel del framebuffer.
-    actual_diffuse = (material.diffuse * diffuse_intensity * material.albedo[0])
+    actual_diffuse = (material.diffuse * diffuse_intensity * material.albedo[0] * (1 - shadow_intensity))
 
     light_reflection = utils.reflect(light_direction, intersect.normal)
     reflection_intensity = max(0, (light_reflection @ direction))
