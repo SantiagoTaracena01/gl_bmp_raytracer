@@ -98,10 +98,21 @@ class Raytracer(object):
     else:
       reflection_color = Color(0, 0, 0)
 
+    # Cálculo de la refracción del material.
+    if (material.albedo[3] > 0):
+      refraction_direction = utils.refract(direction, intersect.normal, material.refractive_index)
+      refraction_bias = -0.5 if ((refraction_direction @ intersect.normal) < 0) else 0.5
+      refraction_origin = (intersect.hit_point + (intersect.normal * refraction_bias))
+      refract_color = self.cast_ray(refraction_origin, refraction_direction, (recursion_counter + 1))
+    else:
+      refract_color = Color(0, 0, 0)
+
+    # Valores finales de la reflexión y la refracción.
     reflection = (reflection_color * material.albedo[2])
+    refraction = (refract_color * material.albedo[3])
 
     # Retorno del color a pintar.
-    return (actual_diffuse + specular_component + reflection)
+    return (actual_diffuse + specular_component + reflection + refraction)
 
   # Método que halla la intersección del rayo con un objeto.
   def scene_intersect(self, origin, direction):

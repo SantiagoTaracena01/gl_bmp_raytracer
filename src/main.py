@@ -17,9 +17,10 @@ import time
 if __name__ == "__main__":
 
   # Materiales creados en la clase.
-  ivory = Material(Color(100, 100, 80), [0.6,  0.3, 0], 50)
-  rubber = Material(Color(80, 0, 0), [0.9,  0.1, 0], 10)
-  mirror = Material(Color(255, 255, 255), [0, 1, 0.8], 1425)
+  rubber = Material(Color(130, 0, 0), [0.9,  0.1, 0, 0], 10)
+  ivory = Material(Color(100, 100, 80), [0.6,  0.3, 0.1, 0], 50)
+  mirror = Material(Color(255, 255, 255), [0, 1, 0.8, 0], 1425)
+  glass = Material(Color(150, 180, 200), [0, 0.5, 0.1, 0.8], 125, 1.5)
 
   # Instancia del raytracer y color de fondo.
   raytracer = Raytracer(1000, 1000)
@@ -29,6 +30,7 @@ if __name__ == "__main__":
   # Escena definida en clase.
   raytracer.scene = [
     Sphere(Vector(0, -1.5, -10), 1.5, ivory),
+    Sphere(Vector(0, 0, -5), 0.5, glass),
     Sphere(Vector(1, 1, -8), 1.7, rubber),
     Sphere(Vector(-3, 3, -10), 2, mirror),
   ]
