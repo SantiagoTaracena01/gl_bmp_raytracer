@@ -6,8 +6,6 @@ Santiago Taracena Puga (20017)
 
 # Librerías y módulos necesarios para la clase Envmap.
 from color import Color
-import numpy
-import mmap
 import struct
 import math
 
@@ -23,22 +21,37 @@ class Envmap(object):
   def __read(self):
 
     # Lectura del archivo con la función open().
-    with open(self.path) as image:
+    with open(self.path, "rb") as image:
+
+      # Salto del header y obtención del width y height de la imagen.
+      image.seek(2 + 4 + 2 + 2)
+      header_size = struct.unpack("=l", image.read(4))[0]
+      image.seek(2 + 4 + 2 + 2 + 4 + 4)
+      self.width = struct.unpack("=l", image.read(4))[0]
+      self.height = struct.unpack("=l", image.read(4))[0]
+      image.seek(header_size)
+      self.pixels = []
 
       # Definición de los pixeles de la imagen de Envmap.
-      m = mmap.mmap(image.fileno(), 0, access=mmap.ACCESS_READ)
-      ba = bytearray(m)
-      header_size = struct.unpack("=l", ba[10 : 14])[0]
-      self.width = struct.unpack("=l", ba[18 : 22])[0]
-      self.height = struct.unpack("=l", ba[22 : 26])[0]
-      all_bytes = ba[header_size::]
-      self.pixels = numpy.frombuffer(all_bytes, dtype="uint8")
+      for y in range(self.height):
+        self.pixels.append([])
+        for x in range(self.width):
+          b = ord(image.read(1))
+          g = ord(image.read(1))
+          r = ord(image.read(1))
+          self.pixels[y].append(Color(r, g, b))
 
   # Método para obtener el color de un pixel del Envmap.
   def get_color(self, direction):
-    direction = direction.norm()
-    x = (round(math.atan2(direction.z, direction.x) / (2 * math.pi) + 0.5) * self.width)
-    y = (round(math.acos((-1 * direction.y)) / math.pi) * self.height)
-    index = ((y * self.width + x) * 3) % len(self.pixels)
-    c = self.pixels[index:(index + 3)].astype(numpy.uint8)
-    return Color(c[2], c[1], c[0])
+
+    # Obtención de los valores de x e y para pintar.
+    normalized_direction = direction.norm()
+    x = (round((math.atan2(normalized_direction.z, normalized_direction.x) / (2 * math.pi)) + 0.5) * self.width)
+    y = (round((math.acos((-1 * normalized_direction.y)) / math.pi)) * self.height)
+
+    # Arreglo de problemas con índices.
+    x -= 1 if (x > 0) else 0
+    y -= 1 if (y > 0) else 0
+
+    # Retorno del color encontrado.
+    return self.pixels[y][x]
