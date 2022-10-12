@@ -33,8 +33,8 @@ class Raytracer(object):
     self.framebuffer = []
     self.scene = []
     self.colors = []
-    self.light = Light(Vector(0, 0, 0), 1, Color(255, 255, 255))
     self.envmap = None
+    self.light = Light(Vector(0, 0, 0), 1, Color(255, 255, 255))
     self.clear()
 
   # Método para limpiar la pantalla del raytracer.
@@ -54,12 +54,13 @@ class Raytracer(object):
     if ((0 <= y <= self.height) and (0 <= x <= self.width)):
       self.framebuffer[y][x] = color or self.current_color
 
+  # Método para cambiar el fondo de pantalla de la imagen.
+  def set_envmap(self, envmap):
+    self.envmap = envmap
+
+  # Método para obtener el color de fondo del fondo seteado.
   def get_background(self, direction):
-    if (self.envmap):
-      # Return color from envmap
-      return self.envmap.get_color(direction)
-    else:
-      return self.background_color
+    return self.envmap.get_color(direction) if (self.envmap is not None) else self.background_color
 
   # Método que verifica si un rayo pasa por un objeto del mundo.
   def cast_ray(self, origin, direction, recursion_counter=0):

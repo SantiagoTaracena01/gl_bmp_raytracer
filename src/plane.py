@@ -18,23 +18,28 @@ class Plane(object):
     self.length = length
     self.material = material
 
-  # Método que calcula si un rayo atraviesa la esfera.
+  # Método que calcula si un rayo atraviesa el plano.
   def ray_interception(self, origin, direction):
 
+    # Distancia entre el rayo y el punto de intercepción.
     distance = (((self.center.y - origin.y)) / direction.y)
     hit_point = ((direction * distance) - origin)
     normal = Vector(0, -1, 0)
 
-    if (
-      (distance <= 0) or
-      (hit_point.x > (self.center.x + (self.width / 2))) or (hit_point.x < (self.center.x - (self.width / 2))) or
-      (hit_point.z > (self.center.z + (self.length / 2))) or (hit_point.z < (self.center.z - (self.length / 2)))
-      ):
+    # Condiciones en las que no hay una intercepción.
+    neg_distance = (distance <= 0)
+    too_left = (hit_point.x < (self.center.x - (self.width / 2)))
+    too_right = (hit_point.x > (self.center.x + (self.width / 2)))
+    too_close = (hit_point.z < (self.center.z - (self.length / 2)))
+    too_far = (hit_point.z > (self.center.z + (self.length / 2)))
+
+    # Retorno de None si alguna condición se cumple.
+    if ((neg_distance) or (too_right) or (too_left) or (too_far) or (too_close)):
       return None
 
-    # Retorno de la función.
+    # Retorno de un intercepto si este existe.
     return Intersect(distance, hit_point, normal)
 
-  # Representación textual de la esfera.
+  # Representación textual del plano.
   def __repr__(self):
-    return f"({self.y})"
+    return f"({self.center}, {self.width}, {self.length})"

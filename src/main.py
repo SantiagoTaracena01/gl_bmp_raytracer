@@ -37,8 +37,9 @@ if __name__ == "__main__":
     Sphere(Vector(-2, 1, -10), 2, mirror),
     Plane(Vector(0, 2.5, -5), 2, 2, mirror),
   ]
-  
-  raytracer.envmap = Envmap("./env/envmap.bmp")
+
+  # Fondo de pantalla de la imagen generada por el raytracer.
+  raytracer.set_envmap(Envmap("./env/envmap.bmp"))
 
   # Renderización y toma de tiempo del programa.
   start = time.time()
