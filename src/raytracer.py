@@ -34,6 +34,7 @@ class Raytracer(object):
     self.scene = []
     self.colors = []
     self.light = Light(Vector(0, 0, 0), 1, Color(255, 255, 255))
+    self.envmap = None
     self.clear()
 
   # Método para limpiar la pantalla del raytracer.
@@ -53,19 +54,26 @@ class Raytracer(object):
     if ((0 <= y <= self.height) and (0 <= x <= self.width)):
       self.framebuffer[y][x] = color or self.current_color
 
+  def get_background(self, direction):
+    if (self.envmap):
+      # Return color from envmap
+      return self.envmap.get_color(direction)
+    else:
+      return self.background_color
+
   # Método que verifica si un rayo pasa por un objeto del mundo.
   def cast_ray(self, origin, direction, recursion_counter=0):
 
     # Contador de la recursividad del método.
     if (recursion_counter >= MAX_RECURSION_DEPTH):
-      return self.background_color
+      return self.get_background(direction)
 
     # Material e intercepto hallados mediante la función para encontrar el intercepto de la escena.
     material, intersect = self.scene_intersect(origin, direction)
 
     # Retorno del color de fondo si el material no se ha encontrado.
     if (material is None):
-      return self.background_color
+      return self.get_background(direction)
 
     # Cálculo de la dirección de la luz y la intensidad del color.
     light_direction = (self.light.position - intersect.hit_point).norm()
@@ -90,8 +98,7 @@ class Raytracer(object):
 
     # Cálculo de la reflexión del material.
     if (material.albedo[2] > 0):
-      reverse_direction = (direction * -1)
-      reflection_direction = utils.reflect(reverse_direction, intersect.normal)
+      reflection_direction = utils.reflect(direction, intersect.normal)
       reflection_bias = -0.5 if ((reflection_direction @ intersect.normal) < 0) else 0.5
       reflection_origin = (intersect.hit_point + (intersect.normal * reflection_bias))
       reflection_color = self.cast_ray(reflection_origin, reflection_direction, (recursion_counter + 1))
