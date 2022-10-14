@@ -28,6 +28,7 @@ if __name__ == "__main__":
   raytracer = Raytracer(1000, 1000)
   raytracer.background_color = Color(0, 0, 100)
   raytracer.light = Light(Vector(-20, 20, 20), 2, Color(255, 255, 255))
+  raytracer.set_ray_probability(1)
 
   # Escena definida en clase.
   raytracer.scene = [

@@ -5,6 +5,7 @@ Santiago Taracena Puga (20017)
 """
 
 # Librerías y módulos necesarios para la clase Envmap.
+from numpy import round_
 from color import Color
 import struct
 import math
@@ -46,8 +47,8 @@ class Envmap(object):
 
     # Obtención de los valores de x e y para pintar.
     normalized_direction = direction.norm()
-    x = (round((math.atan2(normalized_direction.z, normalized_direction.x) / (2 * math.pi)) + 0.5) * self.width)
-    y = (round((math.acos((-1 * normalized_direction.y)) / math.pi)) * self.height)
+    x = round(((math.atan2(normalized_direction.z, normalized_direction.x) / (2 * math.pi)) + 0.5) * self.width)
+    y = (-1 * round((math.acos((-1 * normalized_direction.y)) / math.pi) * self.height))
 
     # Arreglo de problemas con índices.
     x -= 1 if (x > 0) else 0
