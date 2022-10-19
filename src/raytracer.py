@@ -8,6 +8,7 @@ Santiago Taracena Puga (20017)
 from vector import Vector
 from light import Light
 from color import Color
+import bmp
 import math
 import utils
 import random
@@ -177,41 +178,7 @@ class Raytracer(object):
 
   # Método para renderizar el raytracer.
   def write(self, filename="./images/image.bmp"):
-
-    # Formateo del nombre del archivo para estar en la carpeta de imágenes.
-    bmp_filename = filename if filename.endswith(".bmp") else f"{filename}.bmp"
-    actual_filename = bmp_filename if bmp_filename.startswith("./images/") else f"./images/{bmp_filename}"
-
-    # Apertura del archivo.
-    file = open(actual_filename, "bw")
-
-    # Escritura preliminar del header del archivo.
-    file.write(utils.char("B"))
-    file.write(utils.char("M"))
-    file.write(utils.dword(self.__HEADER_SIZE + (self.width * self.height * self.__COLORS_PER_PIXEL)))
-    file.write(utils.dword(0))
-    file.write(utils.dword(self.__HEADER_SIZE))
-
-    # Finalización de la escritura del header del archivo.
-    file.write(utils.dword(self.__IMAGE_HEADER_SIZE))
-    file.write(utils.dword(self.width))
-    file.write(utils.dword(self.height))
-    file.write(utils.word(1))
-    file.write(utils.word(24))
-    file.write(utils.dword(0))
-    file.write(utils.dword(self.width * self.height * self.__COLORS_PER_PIXEL))
-    file.write(utils.dword(0))
-    file.write(utils.dword(0))
-    file.write(utils.dword(0))
-    file.write(utils.dword(0))
-
-    # Escritura de cada pixel del archivo mediante los valores del framebuffer.
-    for x in range(self.width):
-      for y in range(self.height):
-        file.write(self.framebuffer[y][x].to_bytes())
-
-    # Cierre del archivo.
-    file.close()
-
-    # Retorno del nombre del archivo para futuras operaciones.
-    return actual_filename
+    return bmp.write_bmp(
+      filename, self.framebuffer, self.width, self.height,
+      (self.__HEADER_SIZE, self.__IMAGE_HEADER_SIZE, self.__COLORS_PER_PIXEL)
+    )

@@ -5,7 +5,6 @@ Santiago Taracena Puga (20017)
 """
 
 # Librerías y módulos necesarios para la clase Envmap.
-from numpy import round_
 from color import Color
 import struct
 import math

@@ -8,5 +8,11 @@ Santiago Taracena Puga (20017)
 from intersect import Intersect
 
 class Cube(object):
-  def __init__(self):
-    print("Hello cube")
+
+  def __init__(self, center, radius, material):
+    self.center = center
+    self.radius = radius
+    self.material = material
+
+  def ray_interception(self, origin, direction):
+    ...
