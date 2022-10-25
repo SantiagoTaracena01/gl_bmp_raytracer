@@ -5,7 +5,6 @@ Santiago Taracena Puga (20017)
 """
 
 # Librerías y módulos necesarios para la clase Envmap.
-from color import Color
 import bmp
 import math
 
