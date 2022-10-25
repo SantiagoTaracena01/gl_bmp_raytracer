@@ -6,7 +6,7 @@ Santiago Taracena Puga (20017)
 
 # Librerías y módulos necesarios para la clase Envmap.
 from color import Color
-import struct
+import bmp
 import math
 
 # Definición de la clase Envmap.
@@ -15,31 +15,7 @@ class Envmap(object):
   # Método constructor de la clase Envmap.
   def __init__(self, path):
     self.path = path
-    self.__read()
-
-  # Método para leer el archivo que se pase a la instancia.
-  def __read(self):
-
-    # Lectura del archivo con la función open().
-    with open(self.path, "rb") as image:
-
-      # Salto del header y obtención del width y height de la imagen.
-      image.seek(2 + 4 + 2 + 2)
-      header_size = struct.unpack("=l", image.read(4))[0]
-      image.seek(2 + 4 + 2 + 2 + 4 + 4)
-      self.width = struct.unpack("=l", image.read(4))[0]
-      self.height = struct.unpack("=l", image.read(4))[0]
-      image.seek(header_size)
-      self.pixels = []
-
-      # Definición de los pixeles de la imagen de Envmap.
-      for y in range(self.height):
-        self.pixels.append([])
-        for x in range(self.width):
-          b = ord(image.read(1))
-          g = ord(image.read(1))
-          r = ord(image.read(1))
-          self.pixels[y].append(Color(r, g, b))
+    self.width, self.height, self.pixels = bmp.read_bmp(path)
 
   # Método para obtener el color de un pixel del Envmap.
   def get_color(self, direction):

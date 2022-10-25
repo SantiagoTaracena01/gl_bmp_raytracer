@@ -23,6 +23,7 @@ char = lambda character: struct.pack("=c", character.encode("ascii"))
 word = lambda word: struct.pack("=h", word)
 dword = lambda dword: struct.pack("=l", dword)
 reflect = lambda I, N: (I - N * 2 * (N @ I)).norm()
+unpack = lambda buffer: struct.unpack("=l", buffer)[0]
 
 # Función que refracta un rayo utilizando su normal.
 def refract(I, N, roi):
