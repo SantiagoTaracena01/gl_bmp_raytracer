@@ -9,6 +9,7 @@ from raytracer import Raytracer
 from vector import Vector
 from sphere import Sphere
 from plane import Plane
+from cube import Cube
 from material import Material
 from light import Light
 from color import Color
@@ -37,6 +38,7 @@ if __name__ == "__main__":
     Sphere(Vector(1, 1, -8), 1.7, rubber),
     Sphere(Vector(-2, 1, -10), 2, mirror),
     Plane(Vector(0, 2.5, -5), 2, 2, mirror),
+    Cube(Vector(-1.5, -1.5, -5), 1, rubber),
   ]
 
   # Fondo de pantalla de la imagen generada por el raytracer.

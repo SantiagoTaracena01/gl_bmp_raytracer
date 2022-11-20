@@ -12,6 +12,7 @@ class Vector(object):
     self.x = x
     self.y = y
     self.z = z
+    self.values = (x, y, z)
 
   # Sobreescritura de la suma de vectores.
   def __add__(self, other):

@@ -40,7 +40,7 @@ class Raytracer(object):
 
   # Método para limpiar la pantalla del raytracer.
   def clear(self):
-    self.framebuffer = [[self.background_color for x in range(self.width)] for y in range(self.height)]
+    self.framebuffer = [[self.background_color for _ in range(self.width)] for _ in range(self.height)]
 
   # Método para cambiar fácilmente el color de fondo.
   def set_background_color(self, r, g, b):
