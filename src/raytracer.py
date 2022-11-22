@@ -13,6 +13,7 @@ import math
 import utils
 import random
 
+# Valor de recursión máxima (3 iteraciones).
 MAX_RECURSION_DEPTH = 3
 
 # Definición de la clase Raytracer.

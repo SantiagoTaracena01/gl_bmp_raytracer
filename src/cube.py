@@ -4,12 +4,14 @@ Universidad del Valle de Guatemala
 Santiago Taracena Puga (20017)
 """
 
-# Librerías utilizadas para el desarrollo de la clase Sphere.
+# Librerías utilizadas para el desarrollo de la clase Cube.
 from intersect import Intersect
-from vector import Vector
 
 # Definición de la clase Cube.
 class Cube(object):
+
+  # Componentes de un vector a verificar en una intercepción.
+  __COMPONENTS = 3
 
   # Método constructor de la clase Cube.
   def __init__(self, center, width, material):
@@ -17,66 +19,47 @@ class Cube(object):
     self.width = width
     self.material = material
 
+  # Método que detecta si un rayo interceptó con el cubo.
   def ray_interception(self, origin, direction):
-    tmin = -999_999
-    tmax = 999_999
 
-    txmin = ((self.center.x - (self.width*0.5)) - origin.x) / direction.x
-    txmax = ((self.center.x + (self.width*0.5)) - origin.x) / direction.x
+    # Valores iniciales mínimos y máximos para la intercepción.
+    min_t_value = -999_999
+    max_t_value = 999_999
 
-    if txmin > txmax:
-      txmin, txmax = txmax, txmin
+    # Verificación de máximos para todos los componentes del vector.
+    for i in range(self.__COMPONENTS):
 
-    if txmin > tmin:
-      tmin = txmin
+      # Cálculo de los valores mínimos y máximos del componente.
+      min_tc_value = (((self.center.values[i] - (self.width / 2)) - origin.values[i]) / direction.values[i])
+      max_tc_value = (((self.center.values[i] + (self.width / 2)) - origin.values[i]) / direction.values[i])
 
-    if txmax < tmax:
-      tmax = txmax
+      # Cambio de valores si el valor mínimo del componente es mayor al máximo.
+      if (min_tc_value > max_tc_value):
+        min_tc_value, max_tc_value = max_tc_value, min_tc_value
 
-    if tmin > tmax:
-      return False
+      # Cambio de los valores máximos del cuadrado si algún componente supera el máximo.
+      min_t_value = min_tc_value if (min_tc_value > min_t_value) else min_t_value
+      max_t_value = max_tc_value if (max_tc_value < max_t_value) else max_t_value
 
-    tymin = ((self.center.y - (self.width*0.5)) - origin.y) / direction.y
-    tymax = ((self.center.y + (self.width*0.5)) - origin.y) / direction.y
+      # Si el valor mínimo fuera mayor al máximo, no hay intercepción.
+      if (min_t_value > max_t_value):
+        return None
 
-    if tymin > tymax:
-      tymin, tymax = tymax, tymin
+    # Si el valor mínmo fuera menor a cero, debemos utilizar el máximo para comprobar la intercepción.
+    if (min_t_value < 0):
+      min_t_value = max_t_value
 
-    if tymin > tmin:
-      tmin = tymin
+      # Si el valor máximo sigue siendo menor a cero, 
+      if (min_t_value < 0):
+        return None
 
-    if tymax < tmax:
-      tmax = tymax
+    # Cálculo del impacto y la normal de la intercepción.
+    hit_point = ((direction * min_t_value) - origin)
+    normal = (hit_point - self.center).norm()
 
-    if tmin > tmax:
-      return False
-
-    tzmin = ((self.center.z - (self.width*0.5)) - origin.z) / direction.z
-    tzmax = ((self.center.z + (self.width*0.5)) - origin.z) / direction.z
-
-    if tzmin > tzmax:
-      tzmin, tzmax = tzmax, tzmin
-
-    if tzmin > tmin:
-      tmin = tzmin
-
-    if tzmax < tmax:
-      tmax = tzmax
-
-    if tmin > tmax:
-      return False
-
-    if tmin < 0:
-      tmin = tmax
-
-      if tmin < 0:
-        return False
-
-    impact = (direction * tmin) - origin
-    normal = (impact - self.center).norm()
-
+    # Retorno de la instancia de la intercepción.
     return Intersect(
-      distance = tmin, 
-      hit_point = impact, 
-      normal = normal,
+      distance=min_t_value, 
+      hit_point=hit_point, 
+      normal=normal,
     )
