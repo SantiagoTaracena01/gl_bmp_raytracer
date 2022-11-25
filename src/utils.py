@@ -43,6 +43,7 @@ def refract(I, N, roi):
     N *= -1
 
   # Valor eta, resultante de la división de las dos componentes.
+  eta_t = 1E-06 if (eta_t == 0) else eta_t
   eta = (eta_i / eta_t)
 
   # Simplificación de la expresión a un valor k para luego obtener su raíz cuadrada.

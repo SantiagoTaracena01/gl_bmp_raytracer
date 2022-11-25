@@ -29,7 +29,7 @@ class Triangle(object):
   def ray_interception(self, origin, direction):
 
     # Vértices del triángulo.
-    first_vertex, second_vertex, third_vertex = self.vertices
+    first_vertex, second_vertex, third_vertex = self.individual_vertices
 
     # Bordes necesarios para el cálculo de las coordenadas del triángulo.
     first_edge = (second_vertex - first_vertex)

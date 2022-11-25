@@ -22,6 +22,7 @@ class Plane(object):
   def ray_interception(self, origin, direction):
 
     # Distancia entre el rayo y el punto de intercepción.
+    direction.y = 1E-06 if (direction.y == 0) else direction.y
     distance = (((self.center.y - origin.y)) / direction.y)
     hit_point = ((direction * distance) - origin)
     normal = Vector(0, -1, 0)
