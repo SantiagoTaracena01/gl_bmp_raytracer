@@ -46,7 +46,7 @@ class Vector(object):
 
   # Método que retorna el vector normalizado.
   def norm(self):
-    return (self * (1 / self.length()))
+    return ((self * (1 / self.length())) if (self.length() != 0) else Vector(1, 1, 1))
 
   # Representación textual del vector.
   def __repr__(self):

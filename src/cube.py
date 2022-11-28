@@ -30,8 +30,12 @@ class Cube(object):
     for i in range(self.__COMPONENTS):
 
       # Cálculo de los valores mínimos y máximos del componente.
-      min_tc_value = (((self.center.values[i] - (self.width / 2)) - origin.values[i]) / direction.values[i])
-      max_tc_value = (((self.center.values[i] + (self.width / 2)) - origin.values[i]) / direction.values[i])
+      if (direction.values[i] != 0):
+        min_tc_value = (((self.center.values[i] - (self.width / 2)) - origin.values[i]) / direction.values[i])
+        max_tc_value = (((self.center.values[i] + (self.width / 2)) - origin.values[i]) / direction.values[i])
+      else:
+        min_tc_value = -999_999
+        max_tc_value = 999_999
 
       # Cambio de valores si el valor mínimo del componente es mayor al máximo.
       if (min_tc_value > max_tc_value):

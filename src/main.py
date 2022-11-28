@@ -23,56 +23,63 @@ if __name__ == "__main__":
 
   # Materiales creados en la clase.
   sand = Material(Color(250, 200, 150), [0.9, 0.1, 0, 0], 20)
-  water = Material(Color(0, 20, 100), [0.6, 0.4, 0.5, 0.5], 200)
-  jump_sphere = Material(Color(200, 200, 50), [0.6, 0.4, 0, 0], 80)
-  gold = Material(Color(210, 175, 50), [0.9, 0.1, 0.5, 0], 500)
-  stone = Material(Color(150, 150, 150), [0.9, 0.1, 0, 0], 0)
-  dirt = Material(Color(150, 100, 60), [0.6, 0.4, 0, 0], 1000)
-  #grass = Material()
+  stone = Material(Color(100, 100, 100), [0.9, 0.1, 0, 0], 0)
+  cactus = Material(Color(0, 150, 40), [0.7, 0.3, 0, 0], 150)
+  obsidian = Material(Color(35, 10, 45), [0.7, 0.3, 0.2, 0], 1000)
+  portal = Material(Color(240, 160, 255), [0.5, 0.5, 0.1, 0.5], 300, 1.25)
 
   # Instancia del raytracer y color de fondo.
-  raytracer = Raytracer(760, 760)
+  raytracer = Raytracer(1000, 1000)
   raytracer.background_color = Color(0, 190, 255)
   raytracer.light = Light(Vector(5, -5, 5), 25, Color(255, 255, 255))
   raytracer.set_ray_probability(1)
 
   # Escena definida en clase.
   raytracer.scene = [
-    # Sphere(Vector(0, 0, -10), 3, gold),
-    # Pyramid(((-2, 1, -5), (2, 1, -5), (0, -1, -4), (0, 1.25, -3)), gold),
-    Cube(Vector(-4, 4, -8), 1, stone),
-    Cube(Vector(-3, 4, -8), 1, stone),
-    Cube(Vector(-2, 4, -8), 1, stone),
-    Cube(Vector(-1, 4, -8), 1, stone),
-    Cube(Vector(0, 4, -8), 1, stone),
-    Cube(Vector(1, 4, -8), 1, stone),
-    Cube(Vector(2, 4, -8), 1, stone),
-    Cube(Vector(3, 4, -8), 1, stone),
-    Cube(Vector(4, 4, -8), 1, stone),
 
-    Cube(Vector(-4, 3, -8), 1, dirt),
-    Cube(Vector(-3, 3, -8), 1, dirt),
-    Cube(Vector(-2, 3, -8), 1, dirt),
-    Cube(Vector(-1, 3, -8), 1, dirt),
-    Cube(Vector(0, 3, -8), 1, dirt),
-    Cube(Vector(1, 3, -8), 1, dirt),
-    Cube(Vector(2, 3, -8), 1, stone),
-    Cube(Vector(3, 3, -8), 1, stone),
-    Cube(Vector(4, 3, -8), 1, stone),
+    # Suelo de la escena.
+    Plane(Vector(0, 2, -5), 12, 12, sand),
 
-    Cube(Vector(-4, 3, -9), 1, dirt),
-    Cube(Vector(-3, 3, -9), 1, dirt),
-    Cube(Vector(-2, 3, -9), 1, dirt),
-    Cube(Vector(-1, 3, -9), 1, dirt),
-    Cube(Vector(0, 3, -9), 1, dirt),
-    Cube(Vector(1, 3, -9), 1, dirt),
-    Cube(Vector(2, 3, -9), 1, stone),
-    Cube(Vector(3, 3, -9), 1, stone),
-    Cube(Vector(4, 3, -9), 1, stone),
+    # Pirámide de la escena.
+    Pyramid(((-3.5, 2.5, -10), (-1.5, 2.5, -10), (-2.5, 0, -9), (-2.5, 2.5, -8)), stone),
+
+    # Primer cactus de la escena.
+    Cube(Vector(-3, 1.75, -6.5), 0.5, cactus),
+    Cube(Vector(-3, 1.25, -6.5), 0.5, cactus),
+    Cube(Vector(-3, 0.75, -6.5), 0.5, cactus),
+
+    # Segundo cactus de la escena.
+    Cube(Vector(3.25, 1.75, -7), 0.5, cactus),
+    Cube(Vector(3.25, 1.25, -7), 0.5, cactus),
+    Cube(Vector(3.25, 0.75, -7), 0.5, cactus),
+
+    # Portal al Nether (Exterior).
+    Cube(Vector(1, 1.75, -8), 0.5, obsidian),
+    Cube(Vector(1, 1.25, -8), 0.5, obsidian),
+    Cube(Vector(1, 0.75, -8), 0.5, obsidian),
+    Cube(Vector(1, 0.25, -8), 0.5, obsidian),
+    Cube(Vector(1, -0.25, -8), 0.5, obsidian),
+    Cube(Vector(1.5, 1.75, -8), 0.5, obsidian),
+    Cube(Vector(2, 1.75, -8), 0.5, obsidian),
+    Cube(Vector(2.5, 1.75, -8), 0.5, obsidian),
+    Cube(Vector(1.5, -0.25, -8), 0.5, obsidian),
+    Cube(Vector(2, -0.25, -8), 0.5, obsidian),
+    Cube(Vector(2.5, -0.25, -8), 0.5, obsidian),
+    Cube(Vector(2.5, 1.25, -8), 0.5, obsidian),
+    Cube(Vector(2.5, 0.75, -8), 0.5, obsidian),
+    Cube(Vector(2.5, 0.25, -8), 0.5, obsidian),
+
+    # Portal al Nether (Interior).
+    Cube(Vector(1.5, 1.25, -8), 0.5, portal),
+    Cube(Vector(1.5, 0.75, -8), 0.5, portal),
+    Cube(Vector(1.5, 0.25, -8), 0.5, portal),
+    Cube(Vector(2, 1.25, -8), 0.5, portal),
+    Cube(Vector(2, 0.75, -8), 0.5, portal),
+    Cube(Vector(2, 0.25, -8), 0.5, portal),
   ]
 
   # Fondo de pantalla de la imagen generada por el raytracer.
-  # raytracer.set_envmap(Envmap("./env/envmap.bmp"))
+  raytracer.set_envmap(Envmap("./env/desert.bmp"))
 
   # Renderización y toma de tiempo del programa.
   start = time.time()
