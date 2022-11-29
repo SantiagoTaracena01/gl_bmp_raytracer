@@ -25,8 +25,11 @@ if __name__ == "__main__":
   sand = Material(Color(250, 200, 150), [0.9, 0.1, 0, 0], 20)
   stone = Material(Color(100, 100, 100), [0.9, 0.1, 0, 0], 0)
   cactus = Material(Color(0, 150, 40), [0.7, 0.3, 0, 0], 150)
+  rose = Material(Color(255, 15, 90), [0.6, 0.4, 0, 0], 200)
   obsidian = Material(Color(35, 10, 45), [0.7, 0.3, 0.2, 0], 1000)
   portal = Material(Color(240, 160, 255), [0.5, 0.5, 0.1, 0.5], 300, 1.25)
+  wither_head = Material(Color(60, 60, 60), [0.8, 0.2, 0, 0], 50)
+  wither_body = Material(Color(30, 30, 30), [0.8, 0.2, 0, 0], 50)
 
   # Instancia del raytracer y color de fondo.
   raytracer = Raytracer(1000, 1000)
@@ -41,17 +44,21 @@ if __name__ == "__main__":
     Plane(Vector(0, 2, -5), 12, 12, sand),
 
     # Pirámide de la escena.
-    Pyramid(((-3.5, 2.5, -10), (-1.5, 2.5, -10), (-2.5, 0, -9), (-2.5, 2.5, -8)), stone),
+    Pyramid(((-4.5, 3, -10), (1, 3, -10), (-2.25, -1, -9), (-2.25, 3, -8)), stone),
 
     # Primer cactus de la escena.
-    Cube(Vector(-3, 1.75, -6.5), 0.5, cactus),
-    Cube(Vector(-3, 1.25, -6.5), 0.5, cactus),
-    Cube(Vector(-3, 0.75, -6.5), 0.5, cactus),
+    Cube(Vector(-3, 1.8, -6.5), 0.35, cactus),
+    Cube(Vector(-3, 1.45, -6.5), 0.35, cactus),
+    Cube(Vector(-3, 1.1, -6.5), 0.35, cactus),
+    Cube(Vector(-2.65, 0.85, -6.25), 0.15, rose),
+    Cube(Vector(-3.2, 1.3, -6.25), 0.15, rose),
 
     # Segundo cactus de la escena.
-    Cube(Vector(3.25, 1.75, -7), 0.5, cactus),
-    Cube(Vector(3.25, 1.25, -7), 0.5, cactus),
-    Cube(Vector(3.25, 0.75, -7), 0.5, cactus),
+    Cube(Vector(3.25, 1.8, -7), 0.35, cactus),
+    Cube(Vector(3.25, 1.45, -7), 0.35, cactus),
+    Cube(Vector(3.25, 1.1, -7), 0.35, cactus),
+    Cube(Vector(2.9, 0.85, -6.75), 0.15, rose),
+    Cube(Vector(3.45, 1.5, -6.75), 0.15, rose),
 
     # Portal al Nether (Exterior).
     Cube(Vector(1, 1.75, -8), 0.5, obsidian),
@@ -76,6 +83,73 @@ if __name__ == "__main__":
     Cube(Vector(2, 1.25, -8), 0.5, portal),
     Cube(Vector(2, 0.75, -8), 0.5, portal),
     Cube(Vector(2, 0.25, -8), 0.5, portal),
+
+    # Wither volando en el cielo.
+    Cube(Vector(8, -8, -20), 1, wither_head),
+    Cube(Vector(6.5, -8, -20), 1, wither_head),
+    Cube(Vector(5, -8, -20), 1, wither_head),
+    Cube(Vector(5, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(5.25, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(5.5, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(5.75, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(6, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(6.25, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(6.5, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(6.75, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(7, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(7.25, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(7.5, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(7.75, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(8, -7.5, -20), 0.25, wither_body),
+    Cube(Vector(6.5, -7, -20), 0.5, wither_body),
+    Cube(Vector(6.5, -6.5, -20), 0.5, wither_body),
+    Cube(Vector(6.5, -6, -20), 0.5, wither_body),
+    Cube(Vector(6.5, -5.5, -20), 0.5, wither_body),
+    Cube(Vector(6.5, -5, -20), 0.5, wither_body),
+    Cube(Vector(5.25, -7, -20), 0.25, wither_body),
+    Cube(Vector(5.5, -7, -20), 0.25, wither_body),
+    Cube(Vector(5.75, -7, -20), 0.25, wither_body),
+    Cube(Vector(6, -7, -20), 0.25, wither_body),
+    Cube(Vector(6.25, -7, -20), 0.25, wither_body),
+    Cube(Vector(6.5, -7, -20), 0.25, wither_body),
+    Cube(Vector(6.75, -7, -20), 0.25, wither_body),
+    Cube(Vector(7, -7, -20), 0.25, wither_body),
+    Cube(Vector(7.25, -7, -20), 0.25, wither_body),
+    Cube(Vector(7.5, -7, -20), 0.25, wither_body),
+    Cube(Vector(7.75, -7, -20), 0.25, wither_body),
+    Cube(Vector(5.25, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(5.5, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(5.75, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(6, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(6.25, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(6.5, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(6.75, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(7, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(7.25, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(7.5, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(7.75, -6.5, -20), 0.25, wither_body),
+    Cube(Vector(5.25, -6, -20), 0.25, wither_body),
+    Cube(Vector(5.5, -6, -20), 0.25, wither_body),
+    Cube(Vector(5.75, -6, -20), 0.25, wither_body),
+    Cube(Vector(6, -6, -20), 0.25, wither_body),
+    Cube(Vector(6.25, -6, -20), 0.25, wither_body),
+    Cube(Vector(6.5, -6, -20), 0.25, wither_body),
+    Cube(Vector(6.75, -6, -20), 0.25, wither_body),
+    Cube(Vector(7, -6, -20), 0.25, wither_body),
+    Cube(Vector(7.25, -6, -20), 0.25, wither_body),
+    Cube(Vector(7.5, -6, -20), 0.25, wither_body),
+    Cube(Vector(7.75, -6, -20), 0.25, wither_body),
+    Cube(Vector(5.25, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(5.5, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(5.75, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(6, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(6.25, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(6.5, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(6.75, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(7, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(7.25, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(7.5, -5.5, -20), 0.25, wither_body),
+    Cube(Vector(7.75, -5.5, -20), 0.25, wither_body),
   ]
 
   # Fondo de pantalla de la imagen generada por el raytracer.
